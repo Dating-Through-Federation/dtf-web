@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+    {% block body %}
+        <section class="p-6 bg-gray-100 text-gray-900">
+            {{ form_start(registrationForm, {'attr':{'class':'container flex flex-col mx-auto space-y-12'}}) }}
+            {# <form novalidate="" action="" class="container flex flex-col mx-auto space-y-12"> #}
+                <fieldset class="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-gray-50">
+                    <div class="space-y-2 col-span-full lg:col-span-1">
+                        <p class="font-medium">Registration</p>
+                        <p class="text-xs">Create your Account to Meet New People and More!</p>
+                    </div>
+                    <div class="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+                        <div class="col-span-full sm:col-span-3">
+                            {{ form_label(registrationForm.username,'Create a Username',{'label_attr':{'class':'text-sm'}}) }}
+                            {#		<label for="username" class="text-sm">Create a Username</label> #}
+                            {{ form_widget(registrationForm.username, {'attr':{'class':'w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-fuchsia-600 border-gray-300', 'placeholder':'Username'}}) }}
+                            {#	<input id="firstname" type="text" placeholder="username" class="w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-fuchsia-600 border-gray-300"> #}
+                        </div>
+                        <div class="col-span-full sm:col-span-3">
+                            {{ form_label(registrationForm.username,'Create a Password',{'label_attr':{'class':'text-sm'}}) }}
+                            {{ form_widget(registrationForm.plainPassword, {'attr':{'class':'w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-fuchsia-600 border-gray-300', 'placeholder':'Password'}}) }}
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-gray-50">
+                    <div class="space-y-2 col-span-full lg:col-span-1">
+                        <p class="font-medium">Profile</p>
+                        <p class="text-xs">Some Information About You</p>
+                    </div>
+                    <div class="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
+                        <div class="col-span-full sm:col-span-3">
+                            {{ form_label(registrationForm.location,'Your Location',{'label_attr':{'class':'text-sm'}}) }}
+                            {{ form_widget(registrationForm.location, {'attr':{'class':'w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-fuchsia-600 border-gray-300', 'placeholder':'Location'}}) }}
+                        </div>
+                        <div class="col-span-full sm:col-span-3">
+                            {{ form_label(registrationForm.birthdate,'Your Date of Birth',{'label_attr':{'class':'text-sm'}}) }}
+                            {{ form_widget(registrationForm.birthdate, {'attr':{'class':'w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-fuchsia-600 border-gray-300', 'placeholder':'Date of Birth'}}) }}
+                        </div>
+                        <div class="col-span-full">
+                            {{ form_label(registrationForm.bio,'A Short Bio',{'label_attr':{'class':'text-sm'}}) }}
+                            {{ form_widget(registrationForm.bio,{'attr':{'class':'w-full rounded-md focus:ring focus:ring-opacity-75 text-gray-900 focus:ring-fuchsia-600 border-gray-300'}}) }}
+                        </div>
+                        <div class="col-span-full sm:col-span-3">
+                            {{ form_label(registrationForm.agreeTerms, 'Agree to Terms', {'label_attr':{'class':'inline-block ps-[0.15rem] hover:cursor-pointer'}}) }}
+                            {{ form_widget(registrationForm.agreeTerms, {'attr':{'class':"relative float-left -ms-[1.5rem] me-[6px] mt-[0.15rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-secondary-500 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-checkbox before:shadow-transparent before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-px checked:after:ms-[0.25rem] checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-black/60 focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-black/60 focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-checkbox checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:-mt-px checked:focus:after:ms-[0.25rem] checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent rtl:float-right dark:border-neutral-400 dark:checked:border-primary dark:checked:bg-primary"}}) }}
+                        </div>
+                        <div class="col-span-full sm:col-span-3">
+                            {{ form_widget(registrationForm.save,{'attr':{'class':'px-4 py-2 border rounded-md border-gray-800'}}) }}
+                        </div>
+                        {# Photo comming soon!!
+                        <div class="col-span-full">
+                            <label for="bio" class="text-sm">Photo</label>
+                            <div class="flex items-center space-x-2">
+                                <img src="https://source.unsplash.com/30x30/?random" alt="" class="w-10 h-10 bg-gray-500 rounded-full bg-gray-300">
+                                <button type="button" class="px-4 py-2 border rounded-md border-gray-800">Change</button>
+                            </div>
+                        </div>
+                        #}
+                    </div>
+                </fieldset>
+                {{ form_end(registrationForm) }}
+        </section>
+    {% endblock %}

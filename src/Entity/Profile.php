@@ -20,14 +20,14 @@ class Profile
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $age = null;
-
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birthdate = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    private ?string $status = 'Undecided';
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $bio = null;
 
     public function getId(): ?int
     {
@@ -60,14 +60,9 @@ class Profile
 
     public function getAge(): ?string
     {
-        return $this->age;
-    }
+        $diff = $this->birthdate->diff(new \DateTimeImmutable());
 
-    public function setAge(?string $age): static
-    {
-        $this->age = $age;
-
-        return $this;
+        return $diff->format('y');
     }
 
     public function getBirthdate(): ?\DateTimeImmutable
@@ -90,6 +85,18 @@ class Profile
     public function setStatus(string $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): static
+    {
+        $this->bio = $bio;
 
         return $this;
     }
