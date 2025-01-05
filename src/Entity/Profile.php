@@ -37,9 +37,19 @@ class Profile
     #[ORM\ManyToMany(targetEntity: Interests::class, inversedBy: 'profiles')]
     private Collection $interests;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?Image $cover = null;
+
+    /**
+     * @var Collection<int, Image>
+     */
+    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'owner')]
+    private Collection $images;
+
     public function __construct()
     {
         $this->interests = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -134,6 +144,48 @@ class Profile
     public function removeInterest(Interests $interest): static
     {
         $this->interests->removeElement($interest);
+
+        return $this;
+    }
+
+    public function getCover(): ?Image
+    {
+        return $this->cover;
+    }
+
+    public function setCover(?Image $cover): static
+    {
+        $this->cover = $cover;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Image>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Image $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Image $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getOwner() === $this) {
+                $image->setOwner(null);
+            }
+        }
 
         return $this;
     }
