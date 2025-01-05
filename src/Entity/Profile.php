@@ -22,6 +22,9 @@ class Profile
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $birthdate = null;
 
@@ -30,6 +33,9 @@ class Profile
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $following = null;
 
     /**
      * @var Collection<int, Interests>
@@ -81,6 +87,18 @@ class Profile
         return $this;
     }
 
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
     public function getAge(): ?string
     {
         $diff = $this->birthdate->diff(new \DateTimeImmutable());
@@ -115,6 +133,18 @@ class Profile
     public function getBio(): ?string
     {
         return $this->bio;
+    }
+
+    public function getFollowing(): ?array
+    {
+        return $this->following;
+    }
+
+    public function setFollowing(?array $following): static
+    {
+        $this->following = $following;
+
+        return $this;
     }
 
     public function setBio(?string $bio): static

@@ -115,18 +115,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getFollowing(): ?array
-    {
-        return $this->following;
-    }
-
-    public function setFollowing(?array $following): static
-    {
-        $this->following = $following;
-
-        return $this;
-    }
-
     public function getProfile(): ?Profile
     {
         return $this->profile;
@@ -135,12 +123,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setProfile(?Profile $profile): static
     {
         // unset the owning side of the relation if necessary
-        if ($profile === null && $this->profile !== null) {
+        if (null === $profile && null !== $this->profile) {
             $this->profile->setUser(null);
         }
 
         // set the owning side of the relation if necessary
-        if ($profile !== null && $profile->getUser() !== $this) {
+        if (null !== $profile && $profile->getUser() !== $this) {
             $profile->setUser($this);
         }
 
