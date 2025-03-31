@@ -36,6 +36,10 @@ class RegistrationController extends AbstractController
             $profile->setLocation($form->get('location')->getData());
             $profile->setBio($form->get('bio')->getData());
 
+            // Basic Account Status stuff
+            $user->setStatus(User::STATUS_INACTV)
+                ->setType(User::TYPE_MOD);
+
             $entityManager->persist($profile);
             $entityManager->persist($user);
             $entityManager->flush();
