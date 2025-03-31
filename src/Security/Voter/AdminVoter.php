@@ -5,20 +5,18 @@ namespace App\Security\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\User;
 
 final class AdminVoter extends Voter
 {
-    public const USER = 'user';
-
-    public const ADMIN = 'admin';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
         // dd($subject);
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::ADMIN])
-            && $subject instanceof \App\Entity\Admin;
+        return in_array($attribute, [User::TYPE_ADMIN]);
+            // && $subject instanceof \App\Entity\Admin;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -29,17 +27,9 @@ final class AdminVoter extends Voter
             return false;
         }
 
-        // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::admin:
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
-            case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
-        }
+            if($user->getType() === User::TYPE_ADMIN) {
+                return true;
+            }
 
         return false;
     }
