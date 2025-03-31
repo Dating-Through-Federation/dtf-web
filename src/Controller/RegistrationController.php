@@ -38,7 +38,7 @@ class RegistrationController extends AbstractController
 
             // Basic Account Status stuff
             $user->setStatus(User::STATUS_INACTV)
-                ->setType(User::TYPE_MOD);
+                ->setType(User::TYPE_USER);
 
             $entityManager->persist($profile);
             $entityManager->persist($user);

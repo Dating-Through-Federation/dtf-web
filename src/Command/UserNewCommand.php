@@ -1,9 +1,9 @@
 <?php
 
-namespace Selene\CMSBundle\Command;
+namespace App\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Selene\CMSBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
-    name: 'user:new',
+name: 'user:new',
     description: 'Create a New User',
 )]
 class UserNewCommand extends Command
@@ -29,7 +29,7 @@ class UserNewCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('email', InputArgument::OPTIONAL, 'Email address of the new user')
+            ->addArgument('username', InputArgument::OPTIONAL, 'Username of the new user')
             ->addOption('admin', null, InputOption::VALUE_NONE, 'Include to give admin privileges')
         ;
     }
@@ -37,22 +37,24 @@ class UserNewCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $email = $input->getArgument('email');
+        $username = $input->getArgument('username');
 
-        if ($email) {
-            $io->note(sprintf('Creating user with email %s', $email));
+        if ($username) {
+            $io->note(sprintf('Creating user with username %s', $username));
         } else {
-            $email = $io->ask('Email Address of new user:', null, function ($email) {
-                if (!$email) {
-                    throw new \RuntimeException('You must use an email address.');
+            $username = $io->ask('Username Address of new user:', null, function ($username) {
+                if (!$username) {
+                    throw new \RuntimeException('You must use an username address.');
                 }
 
-                return $email;
+                return $username;
             });
         }
 
         $user = new User();
-        $user->setEmail($email);
+        $profile = new Profile();
+        $user->setProfile($profile);
+        $user->setUsername($username);
 
         $user->setPassword(
             $this->userPasswordHasher->hashPassword(
@@ -69,14 +71,22 @@ class UserNewCommand extends Command
 
         $adminString = '';
         if ($admin = $input->getOption('admin')) {
-            $user->addRole('ROLE_ADMIN');
+            $user->setStatus(User::STATUS_ACTIVE)
+                 ->setType(User::TYPE_ADMIN);
             $adminString = ' with admin privileges';
+        } else {
+            $user->setStatus(User::STATUS_INACTV)
+                 ->setType(User::TYPE_USER);
         }
+
+        $profile->setBirthdate(new \DateTime);
+        $profile->setLocation('Nowhere');
+        $profile->setBio('Account created on CLI.  Please fill in proper details as soon as possible.');
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $io->success(sprintf('User %s created%s.', $user->getEmail(), $adminString));
+        $io->success(sprintf('User %s created%s.', $user->getUsername(), $adminString));
 
         return Command::SUCCESS;
     }

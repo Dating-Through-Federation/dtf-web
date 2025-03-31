@@ -1,9 +1,9 @@
 <?php
 
-namespace Selene\CMSBundle\Command;
+namespace App\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Selene\CMSBundle\Entity\User;
+use App\Entity\User;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -26,38 +26,38 @@ class UserAdminCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('email', InputArgument::OPTIONAL, 'Email address to elevate to Admin privileges')
+            ->addArgument('username', InputArgument::OPTIONAL, 'Username address to elevate to Admin privileges')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $email = $input->getArgument('email');
+        $username = $input->getArgument('username');
+            $repo = $this->entityManager->getRepository(User::class);
 
-        if ($email) {
-            $repo = $entityManager->getRepository(User::class);
-        } else {
-            $email = $io->ask('Email Address of user to make admin:', null, function ($email) {
-                if (!$email) {
-                    throw new \RuntimeException('You must use an email address.');
+        if (!$username) {
+            $username = $io->ask('Username Address of user to make admin:', null, function ($username) {
+                if (!$username) {
+                    throw new \RuntimeException('You must use an username address.');
                 }
 
-                return $email;
+                return $username;
             });
         }
 
-        $user = $repo->findOneBy(['email' => $email]);
+        $user = $repo->findOneBy(['username' => $username]);
         if (!$user) {
             throw new \RuntimeException('User not found');
         }
 
-        $user->addRole('ROLE_ADMIN');
+            $user->setStatus(User::STATUS_ACTIVE)
+                ->setType(User::TYPE_ADMIN);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);
 
-        $io->success(sprintf('User %s has admin privileges.', $user->getEmail()));
+        $io->success(sprintf('User %s has admin privileges.', $user->getUsername()));
 
         return Command::SUCCESS;
     }
