@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UserAdminCommand extends Command
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
         parent::__construct();
     }
@@ -34,7 +34,7 @@ class UserAdminCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $username = $input->getArgument('username');
-            $repo = $this->entityManager->getRepository(User::class);
+        $repo = $this->entityManager->getRepository(User::class);
 
         if (!$username) {
             $username = $io->ask('Username Address of user to make admin:', null, function ($username) {
@@ -51,8 +51,8 @@ class UserAdminCommand extends Command
             throw new \RuntimeException('User not found');
         }
 
-            $user->setStatus(User::STATUS_ACTIVE)
-                ->setType(User::TYPE_ADMIN);
+        $user->setStatus(User::STATUS_ACTIVE)
+            ->setType(User::TYPE_ADMIN);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush($user);

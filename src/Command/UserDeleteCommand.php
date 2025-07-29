@@ -17,7 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UserDeleteCommand extends Command
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
         parent::__construct();
     }

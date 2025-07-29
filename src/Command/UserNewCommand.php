@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,14 +14,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
-name: 'user:new',
+    name: 'user:new',
     description: 'Create a New User',
 )]
 class UserNewCommand extends Command
 {
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
     ) {
         parent::__construct();
     }
@@ -79,7 +79,7 @@ class UserNewCommand extends Command
                  ->setType(User::TYPE_USER);
         }
 
-        $profile->setBirthdate(new \DateTime);
+        $profile->setBirthdate(new \DateTime());
         $profile->setLocation('Nowhere');
         $profile->setBio('Account created on CLI.  Please fill in proper details as soon as possible.');
 

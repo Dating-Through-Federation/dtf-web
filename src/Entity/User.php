@@ -3,29 +3,40 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UlidType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Ulid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    const STATUS_ACTIVE = '1';
-    const STATUS_BANNED = '2';
-    const STATUS_INACTV = '3';
+    public const STATUS_ACTIVE = '1';
 
-    const TYPE_ADMIN = 'admin';
-    const TYPE_USER  = 'user';
-    const TYPE_MOD   = 'mod';
+    public const STATUS_BANNED = '2';
+
+    public const STATUS_INACTV = '3';
+
+    public const TYPE_ADMIN = 'admin';
+
+    public const TYPE_USER = 'user';
+
+    public const TYPE_MOD = 'mod';
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UlidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: UlidGenerator::class)]
+    private ?Ulid $id;
+
+    public function getId(): ?Ulid
+    {
+        return $this->id;
+    }
 
     #[ORM\Column(length: 180)]
     private ?string $username = null;
@@ -42,7 +53,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Profile $profile = null;
 
@@ -54,11 +64,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?int $status = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getUsername(): ?string
     {

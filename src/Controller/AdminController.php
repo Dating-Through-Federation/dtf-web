@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -15,6 +17,18 @@ class AdminController extends AbstractController
     {
         return $this->render('admin/index.html.twig', [
             'controller_name' => 'AdminController',
+        ]);
+    }
+
+    #[Route('/admin/users', name: 'app_admin_users')]
+    #[IsGranted('admin')]
+    public function usersList(EntityManagerInterface $em, UserRepository $repo): Response
+    {
+        $users = $repo->findAll();
+
+        // dd($users);
+        return $this->render('admin/users.html.twig', [
+            'users' => $users,
         ]);
     }
 }

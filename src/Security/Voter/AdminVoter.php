@@ -2,21 +2,20 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Entity\User;
 
 final class AdminVoter extends Voter
 {
-
     protected function supports(string $attribute, mixed $subject): bool
     {
         // dd($subject);
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [User::TYPE_ADMIN]);
-            // && $subject instanceof \App\Entity\Admin;
+        // && $subject instanceof \App\Entity\Admin;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -27,9 +26,9 @@ final class AdminVoter extends Voter
             return false;
         }
 
-            if($user->getType() === User::TYPE_ADMIN) {
-                return true;
-            }
+        if (User::TYPE_ADMIN === $user->getType()) {
+            return true;
+        }
 
         return false;
     }
