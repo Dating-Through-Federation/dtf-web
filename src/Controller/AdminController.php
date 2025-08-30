@@ -31,4 +31,16 @@ class AdminController extends AbstractController
             'users' => $users,
         ]);
     }
+
+    #[Route('/admin/users/{id}', name: 'app_admin_users_edit')]
+    #[IsGranted('admin')]
+    public function usersEdit(EntityManagerInterface $em, UserRepository $repo, User $id): Response
+    {
+
+        dd($id);
+
+        return $this->render('admin/users.html.twig', [
+            'user' => $id,
+        ]);
+    }
 }
